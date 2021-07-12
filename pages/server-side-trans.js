@@ -4,12 +4,14 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+import withServerSidePropsHelper from '../utils/withServerSidePropsHelper';
+
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 
-const SecondPage = () => {
+const ServerSide = () => {
 const { locale } = useRouter();
-  const { t } = useTranslation('second-page')
+  const { t } = useTranslation('server-side')
 
   return (
     <>
@@ -28,10 +30,25 @@ const { locale } = useRouter();
   )
 }
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...await serverSideTranslations(locale, ['second-page', 'footer']),
-  },
-})
+export const getServerSideProps = withServerSidePropsHelper(
+	async (context) => {
+		if (context.locale) {
+			const resourse = await serverSideTranslations(context.locale, [
+				'server-side', 'footer'
+			]);
+			return {
+				pageProps: {
+					props: { ...resourse },
+				},
+			};
+		}
 
-export default SecondPage
+		return {
+			pageProps: {
+				props: {},
+			},
+		};
+	}
+);
+
+export default ServerSide
