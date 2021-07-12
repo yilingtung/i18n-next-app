@@ -63,6 +63,20 @@ const Homepage = () => {
               {t('to-server-side-trans')}
             </button>
           </Link>
+		  <Link href={`/${router.locale}/server-side-apollo`} locale={false}>
+            <button
+              type='button'
+            >
+              {t('to-server-side-apollo')}
+            </button>
+          </Link>
+		  <Link href={`/${router.locale}/static`} locale={false}>
+            <button
+              type='button'
+            >
+              static apollo
+            </button>
+          </Link>
         </div>
       </main>
       <Footer />
