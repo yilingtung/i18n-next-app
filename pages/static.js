@@ -5,7 +5,8 @@ import { useTranslation } from 'next-i18next'
 import { gql } from "@apollo/client";
 
 import styles from "../styles/Home.module.css";
-import client from "../apollo-client";
+// import client from "../apollo-client";
+import { initializeApollo } from '../client';
 
 export default function Home({ countries }) {
 	const { locale } = useRouter();
@@ -59,6 +60,7 @@ export default function Home({ countries }) {
 }
 
 export async function getStaticProps() {
+  const client = initializeApollo(null, context);
   const { data } = await client.query({
     query: gql`
       query Countries {

@@ -6,7 +6,8 @@ import styles from "../styles/Home.module.css";
 import { gql } from "@apollo/client";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import client from "../apollo-client";
+// import client from "../apollo-client";
+import { initializeApollo } from '../client';
 import withServerSidePropsHelper from '../utils/withServerSidePropsHelper';
 
 export default function Home({ countries }) {
@@ -62,6 +63,7 @@ export default function Home({ countries }) {
 
 export const getServerSideProps = withServerSidePropsHelper(
 	async (context) => {
+		const client = initializeApollo(null, context);
 		const { data } = await client.query({
 			query: gql`
 			query Countries {
@@ -80,6 +82,7 @@ export const getServerSideProps = withServerSidePropsHelper(
 				'footer',
 			]);
 			return {
+				client,
 				pageProps: {
 					props: { ...resourse, countries: data.countries.slice(0, 4) },
 				},
@@ -87,6 +90,7 @@ export const getServerSideProps = withServerSidePropsHelper(
 		}
 
 		return {
+			client,
 			pageProps: {
 				props: { countries: data.countries.slice(0, 4) },
 			},

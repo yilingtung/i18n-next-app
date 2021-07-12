@@ -1,3 +1,5 @@
+import { addApolloState } from '../client';
+
 export const withServerSidePropsHelper = (getServerSidePropsFunc) => {
 	return async (context) => {
 		const { req, locale: nextLocale, resolvedUrl } = context;
@@ -15,7 +17,12 @@ export const withServerSidePropsHelper = (getServerSidePropsFunc) => {
 		}
 
 		if (getServerSidePropsFunc) {
-			const { pageProps } = await getServerSidePropsFunc(context);
+			const { client, pageProps } = await getServerSidePropsFunc(context);
+
+			// if has apollo client
+			if (client) {
+				return addApolloState(client, pageProps);
+			}
 
 			return pageProps;
 		}
